@@ -37,12 +37,12 @@ const Nav = style.nav`
 
 export const Navbar = () => {
 	return (
-		<>
+		<div>
 			<Nav>
 				<Link to='/'> Dashboard </Link>
 				<Link to='/login'> Login </Link>
 				<Link to='/signup'> Signup </Link>
 			</Nav>
-		</>
+		</div>
 	);
 };
