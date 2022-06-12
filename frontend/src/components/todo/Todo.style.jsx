@@ -31,6 +31,7 @@ export const InputArea = styled.input`
 	border-radius: 20px;
 	padding: 1rem;
 	box-sizing: border-box;
+	font-size: 1.5rem;
 `;
 
 export const SubmitButton = styled.button`
@@ -94,6 +95,8 @@ export const CheckBox = styled.input`
 
 export const TodoItem = styled.div`
 	text-decoration: ${(props) => (props.completed ? 'line-through' : 'none')};
+	color: ${(props) => (props.completed ? 'red' : 'black')};
+	font-size: 1.2rem;
 `;
 
 export const TodoUpdate = styled.div`
@@ -101,4 +104,32 @@ export const TodoUpdate = styled.div`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+`;
+
+export const FilterButtonContainer = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	width: 50%;
+
+	border-radius: 20px;
+	padding: 1rem;
+	box-sizing: border-box;
+	margin: 0.5rem auto;
+`;
+
+export const FilterButton = styled.button`
+	width: 30%;
+	height: 50px;
+	background-color: #24a2b8;
+	color: white;
+	border: none;
+	border-radius: 20px;
+
+	cursor: pointer;
+	font-size: 1.2rem;
+	&:hover {
+		background-color: #24c2b8;
+	}
 `;

@@ -9,11 +9,14 @@ import {
 	TodoEdit,
 	CheckBox,
 	TodoItem,
+	FilterButton,
+	FilterButtonContainer,
 } from './Todo.style';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPencil } from '@fortawesome/free-solid-svg-icons';
 export const Todo = () => {
 	const [todoList, setTodoList] = React.useState([]);
+	const [showData, setShowData] = React.useState([]);
 	const [todo, setTodo] = React.useState('');
 	const [update, setUpdate] = React.useState(false);
 	const [todoUpdateID, setTodoUpdateID] = React.useState('');
@@ -30,6 +33,7 @@ export const Todo = () => {
 				createdAt: new Date(),
 			};
 			setTodoList([...todoList, payload]);
+			setShowData([...showData, payload]);
 			setTodo('');
 		}
 	};
@@ -42,6 +46,8 @@ export const Todo = () => {
 			return item;
 		});
 		setTodoList(newTodoList);
+
+		setShowData(newTodoList);
 	};
 	const handleDelete = (id) => {
 		// Finding todo id and deleting the todo
@@ -49,6 +55,7 @@ export const Todo = () => {
 			return item.id !== id;
 		});
 		setTodoList(newTodoList);
+		setShowData(newTodoList);
 	};
 	const handleEdit = (id) => {
 		// Finding todo id and updating the todo
@@ -75,12 +82,30 @@ export const Todo = () => {
 				return item;
 			});
 			setTodoList(newTodoList);
+			setShowData(newTodoList);
 			setTodo('');
 			setTodoUpdateID('');
 			setUpdate(false);
 		}
 	};
-
+	const showAll = () => {
+		// Showing all todos
+		setShowData(todoList);
+	};
+	const showCompleted = () => {
+		// Showing only completed todos
+		let newTodoList = todoList.filter((item) => {
+			return item.completed === true;
+		});
+		setShowData(newTodoList);
+	};
+	const showUncompleted = () => {
+		// Showing only uncompleted todos
+		let newTodoList = todoList.filter((item) => {
+			return item.completed === false;
+		});
+		setShowData(newTodoList);
+	};
 	return (
 		<div>
 			{/* Todo Input container */}
@@ -106,7 +131,12 @@ export const Todo = () => {
 			{/* Todo List container */}
 			<TodoList>
 				<h1>Todo List</h1>
-				{todoList.map((item) => {
+				<FilterButtonContainer>
+					<FilterButton onClick={showAll}>All</FilterButton>
+					<FilterButton onClick={showCompleted}>Done</FilterButton>
+					<FilterButton onClick={showUncompleted}>Todo</FilterButton>
+				</FilterButtonContainer>
+				{showData.map((item) => {
 					return (
 						<>
 							<TodoListItem>
