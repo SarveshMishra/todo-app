@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
 	TodoContainer,
 	InputBox,
@@ -8,13 +8,15 @@ import {
 	TodoListItem,
 	TodoEdit,
 	CheckBox,
+	TodoItem,
 } from './Todo.style';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPencil } from '@fortawesome/free-solid-svg-icons';
 export const Todo = () => {
 	const [todoList, setTodoList] = React.useState([]);
 	const [todo, setTodo] = React.useState('');
-
+	const [update, setUpdate] = React.useState(false);
+	const [todoUpdateID, setTodoUpdateID] = React.useState('');
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (todo.trim() === '') {
@@ -29,6 +31,53 @@ export const Todo = () => {
 			};
 			setTodoList([...todoList, payload]);
 			setTodo('');
+		}
+	};
+	const handleComplete = (id) => {
+		// Finding todo id and updating the completed status
+		let newTodoList = todoList.map((item) => {
+			if (item.id === id) {
+				item.completed = !item.completed;
+			}
+			return item;
+		});
+		setTodoList(newTodoList);
+	};
+	const handleDelete = (id) => {
+		// Finding todo id and deleting the todo
+		let newTodoList = todoList.filter((item) => {
+			return item.id !== id;
+		});
+		setTodoList(newTodoList);
+	};
+	const handleEdit = (id) => {
+		// Finding todo id and updating the todo
+		// Setting update id to the todo id
+		// Setting update to true and showing the content into todo input to edit
+		setTodoUpdateID(id);
+		setTodo(
+			todoList.find((item) => {
+				return item.id === id;
+			}).item
+		);
+	};
+
+	const handleUpdate = (e) => {
+		e.preventDefault();
+		if (todo.trim() === '') {
+			alert('Please enter a todo');
+			return;
+		} else {
+			let newTodoList = todoList.map((item) => {
+				if (item.id === todoUpdateID) {
+					item.item = todo;
+				}
+				return item;
+			});
+			setTodoList(newTodoList);
+			setTodo('');
+			setTodoUpdateID('');
+			setUpdate(false);
 		}
 	};
 
@@ -46,7 +95,12 @@ export const Todo = () => {
 						value={todo}
 						required={true}
 					/>
-					<SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
+					<SubmitButton onClick={handleSubmit} showButton={!update}>
+						Submit
+					</SubmitButton>
+					<SubmitButton onClick={handleUpdate} showButton={update}>
+						Update
+					</SubmitButton>
 				</InputBox>
 			</TodoContainer>
 			{/* Todo List container */}
@@ -56,11 +110,31 @@ export const Todo = () => {
 					return (
 						<>
 							<TodoListItem>
-								<div> {item.item}</div>
+								<TodoItem completed={item.completed}> {item.item}</TodoItem>
 								<TodoEdit>
-									<CheckBox type='checkbox' />
-									<FontAwesomeIcon icon={faPencil} color='#F9C426' />
-									<FontAwesomeIcon icon={faTrash} color='#D6364B' />
+									<CheckBox
+										type='checkbox'
+										onChange={() => {
+											handleComplete(item.id);
+										}}
+									/>
+									<FontAwesomeIcon
+										icon={faPencil}
+										style={{ cursor: 'pointer' }}
+										color='#F9C426'
+										onClick={() => {
+											setUpdate(true);
+											handleEdit(item.id);
+										}}
+									/>
+									<FontAwesomeIcon
+										icon={faTrash}
+										color='#D6364B'
+										style={{ cursor: 'pointer' }}
+										onClick={() => {
+											handleDelete(item.id);
+										}}
+									/>
 								</TodoEdit>
 							</TodoListItem>
 						</>

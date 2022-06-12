@@ -41,11 +41,13 @@ export const SubmitButton = styled.button`
 	border: none;
 	border-radius: 20px;
 	margin-top: 1rem;
-    cursor: pointer;
-    font-size: 1.2rem;
-    &:hover {
-        background-color: #24c2b8;
-    `;
+	cursor: pointer;
+	font-size: 1.2rem;
+	&:hover {
+		background-color: #24c2b8;
+	}
+	display: ${(props) => (props.showButton ? 'block' : 'none')};
+`;
 
 export const TodoList = styled.div`
 	margin-top: 1rem;
@@ -81,11 +83,22 @@ export const TodoEdit = styled.div`
 	width: 12%;
 `;
 export const CheckBox = styled.input`
-    width: 20px;
-    height: 20px;
+	width: 20px;
+	height: 20px;
 	cursor: pointer;
 	&:checked:after {
 		background-color: #fff;
 		color: #24a2b8;
 	}
+`;
+
+export const TodoItem = styled.div`
+	text-decoration: ${(props) => (props.completed ? 'line-through' : 'none')};
+`;
+
+export const TodoUpdate = styled.div`
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
 `;
